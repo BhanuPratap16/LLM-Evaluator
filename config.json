@@ -1,6 +1,4 @@
 {
-    "openrouter_api_key":"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",
-    "google_ai_api_key":"AIzaSyCExHOwOOLvjzkU8chXnIHdsIFRl0h87GE",
     "coding-style":"https://www.kernel.org/doc/Documentation/process/coding-style.rst",
     "questions" :["Create a simple character device driver that supports basic read/write operations with a 1KB internal buffer.","Implement a platform device driver for a memory-mapped GPIO controller with interrupt support.","Generate a simple Linux kernel driver that registers an interrupt handler for a given IRQ line and logs when the interrupt occurs.","Write a Linux device driver that creates a /proc/mydriver entry and allows user space to read a counter value that increments on every read.","Write a character device driver that implements ioctl to handle commands for setting and getting an integer value."]
 }
