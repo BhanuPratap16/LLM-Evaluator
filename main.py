@@ -29,12 +29,23 @@ client=genai.Client(api_key=api_key)
 
 total_warning=0
 
+
 for i in tqdm(range(iterations), desc="Running Iterations and Scoring"):
+    current_warnings=0
     for j in tqdm(range(len(questions)),desc="Generating Code"):
         if i==0:
             response=client.models.generate_content(
                 model=model,contents=f"{questions[0]} - only provide code and refer to {style} for proper coding style and nothing else also make sure to remove 'c ``` at starting and ``` in' the end of the code and keep author name as Bhanu"
             )
+            rtext=response.text
+            first_line = rtext.splitlines()[0]
+            
+            if first_line.strip() == "```c":
+                rtext.pop(0)
+                rtext.pop(len(rtext)-1)
+            else:
+                # print("First line is something else")
+                print("NO ``c \n")
 
             with open(f"temp_ldd/ldd_{j}.c",'w') as f:
                 f.write(response.text)
@@ -50,6 +61,15 @@ for i in tqdm(range(iterations), desc="Running Iterations and Scoring"):
             response=client.models.generate_content(
                 model=model,contents=f"Given <br> {fix_code} <br> ,these are the errors in it:{fixes}, fix the code and only provide code and nothing else also keep in mind to remove c ``` at starting and ``` in the end of the code and keep author name as Bhanu"
             )
+            rtext=response.text
+            first_line = rtext.splitlines()[0]
+            
+            if first_line.strip() == "```c":
+                rtext.pop(0)
+                rtext.pop(len(rtext)-1)
+            else:
+                # print("First line is something else")
+                print("NO ``c \n")
 
             with open(f"temp_ldd/ldd_{j}.c",'w') as f:
                 f.write(response.text)
@@ -59,21 +79,20 @@ for i in tqdm(range(iterations), desc="Running Iterations and Scoring"):
                 
         
         cmd = ["clang-tidy","ldd.c","-p",".","--extra-arg=-I/lib/modules/$(uname -r)/build/include",f"-export-fixes=fixes/tidy_fixes_{j}.yaml"]
-        try:
-            out =subprocess.run(cmd)
-            text = out.stdout
+        out = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, check=False)
+        text = out.stdout
+        
+        warning = len(re.findall(r":\d+:\d+:\s+warning:", text))
+        error   = len(re.findall(r":\d+:\d+:\s+error:", text))
+        if i==0:
+            warnings.append(warning)
+            errors.append(error)            
+        else:
+            warnings[j]=warning
+            errors[j]=error
             
-            warning = len(re.findall(r":\d+:\d+:\s+warning:", text))
-            error   = len(re.findall(r":\d+:\d+:\s+error:", text))
-            if i==0:
-                warnings.append(warning)
-                errors.append(error)            
-            else:
-                warnings[j]=warning
-                errors[j]=error
-                
-        except Exception as e:
-            print(e)
+        # except Exception as e:
+        #     print(f"Error occured : \n {e}")
             
     compile_rate=0
     warninghandling_score=0
@@ -83,7 +102,9 @@ for i in tqdm(range(iterations), desc="Running Iterations and Scoring"):
     if i==0:
         for j in warnings:
             total_warning+=j
+        current_warnings=total_warning
     else:
+        
         for j in warnings:
             current_warnings+=j
         

@@ -1,0 +1,36 @@
+---
+MainSourceFile:  '/media/sf_LLM-Evaluator/ldd.c'
+Diagnostics:
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        ldd.c
+      FileOffset:      3519
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_LLM-Evaluator'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        ldd.c
+      FileOffset:      5890
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_LLM-Evaluator'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''long'' to signed type ''int'' is implementation-defined'
+      FilePath:        ldd.c
+      FileOffset:      7848
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_LLM-Evaluator'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''long'' to signed type ''int'' is implementation-defined'
+      FilePath:        ldd.c
+      FileOffset:      8659
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_LLM-Evaluator'
+...

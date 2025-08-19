@@ -119,8 +119,8 @@
       "ldd.o",
       "ldd.c"
     ],
-    "directory": "/media/sf_Shared",
-    "file": "/media/sf_Shared/ldd.c",
-    "output": "/media/sf_Shared/ldd.o"
+    "directory": "/media/sf_LLM-Evaluator",
+    "file": "/media/sf_LLM-Evaluator/ldd.c",
+    "output": "/media/sf_LLM-Evaluator/ldd.o"
   }
 ]

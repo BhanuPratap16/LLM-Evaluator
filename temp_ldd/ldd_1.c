@@ -2,258 +2,233 @@
 #include <linux/fs.h>
 #include <linux/cdev.h>
 #include <linux/device.h>
-#include <linux/uaccess.h>
-#include <linux/spinlock.h>
-#include <linux/slab.h>
+#include <linux/uaccess.h> /* For copy_to_user, copy_from_user */
+#include <linux/slab.h>    /* For kmalloc, kfree, kzalloc */
 
-#define DRIVER_NAME "mychardev"
-#define DEVICE_NAME "mychardev"
+#define DRIVER_NAME "mychar_dev"
+#define DEVICE_NAME "mychar"
 #define BUFFER_SIZE 1024
 
-/* Module metadata */
-MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Bhanu");
-MODULE_DESCRIPTION("A simple 1KB buffer character device driver");
-MODULE_VERSION("0.1");
-
-static dev_t my_dev_number;
-static struct class *my_class;
+/* Module Global Variables */
+static dev_t my_device_nbr;
 static struct cdev my_cdev;
-
-static char my_buffer[BUFFER_SIZE];
-static unsigned int my_buffer_len; /* Current amount of data in the buffer */
-static spinlock_t my_buffer_lock;
+static struct class *my_class;
+static char *my_buffer;
 
 /*
- * @brief Opens the device file.
- * @param inode Pointer to the inode structure.
- * @param file Pointer to the file structure.
- * @return 0 on success, or a negative error code.
+ * @brief This function is called when a device file is opened.
+ * @param inode: Pointer to the inode structure.
+ * @param file: Pointer to the file structure.
+ * @return 0 on success, or a negative error code on failure.
  */
-static int my_open(struct inode *inode, struct file *file)
+static int my_device_open(struct inode *inode, struct file *file)
 {
-	if (!try_module_get(THIS_MODULE))
-		return -ENODEV; /* Failed to get module reference */
-
-	printk(KERN_INFO "%s: Device opened\n", DEVICE_NAME);
-	return 0;
+    /*
+     * We don't need to do anything specific here for a simple
+     * buffer device.
+     */
+    pr_info("%s: Device opened\n", DRIVER_NAME);
+    return 0;
 }
 
 /*
- * @brief Releases the device file.
- * @param inode Pointer to the inode structure.
- * @param file Pointer to the file structure.
- * @return 0 on success.
+ * @brief This function is called when a device file is closed.
+ * @param inode: Pointer to the inode structure.
+ * @param file: Pointer to the file structure.
+ * @return 0 on success, or a negative error code on failure.
  */
-static int my_release(struct inode *inode, struct file *file)
+static int my_device_release(struct inode *inode, struct file *file)
 {
-	module_put(THIS_MODULE);
-	printk(KERN_INFO "%s: Device closed\n", DEVICE_NAME);
-	return 0;
+    pr_info("%s: Device closed\n", DRIVER_NAME);
+    return 0;
 }
 
 /*
- * @brief Reads data from the device buffer.
- * @param file Pointer to the file structure.
- * @param __user_buf Pointer to user space buffer.
- * @param count Number of bytes to read.
- * @param ppos Pointer to the file offset.
- * @return Number of bytes read, or a negative error code.
+ * @brief This function is called to read data from the device.
+ * @param file: Pointer to the file structure.
+ * @param user_buffer: Pointer to the user buffer to copy data into.
+ * @param count: The number of bytes to read.
+ * @param offset: Pointer to the file offset.
+ * @return The number of bytes read on success, or a negative error code on failure.
  */
-static ssize_t my_read(struct file *file, char __user *__user_buf,
-		       size_t count, loff_t *ppos)
+static ssize_t my_device_read(struct file *file, char __user *user_buffer,
+                              size_t count, loff_t *offset)
 {
-	unsigned long flags;
-	ssize_t bytes_read = 0;
-	size_t bytes_to_copy;
+    ssize_t bytes_to_read;
 
-	spin_lock_irqsave(&my_buffer_lock, flags);
+    /* Check if the offset is beyond the buffer size */
+    if (*offset >= BUFFER_SIZE)
+        return 0; /* End of file */
 
-	/* Check if read position is beyond current data length */
-	if (*ppos >= my_buffer_len) {
-		goto out; /* Return 0 (EOF) */
-	}
+    /* Calculate the number of bytes available to read from the current offset */
+    bytes_to_read = min((size_t)(BUFFER_SIZE - *offset), count);
 
-	/* Calculate how many bytes can be copied to user */
-	bytes_to_copy = min((size_t)count, (size_t)(my_buffer_len - *ppos));
+    /* Copy data from kernel buffer to user buffer */
+    if (copy_to_user(user_buffer, my_buffer + *offset, bytes_to_read)) {
+        pr_err("%s: Failed to copy data to user space\n", DRIVER_NAME);
+        return -EFAULT;
+    }
 
-	spin_unlock_irqrestore(&my_buffer_lock, flags);
+    *offset += bytes_to_read;
+    pr_info("%s: Read %zd bytes from offset %lld\n", DRIVER_NAME,
+            bytes_to_read, *offset - bytes_to_read);
 
-	/* Copy data to user space */
-	if (copy_to_user(__user_buf, my_buffer + *ppos, bytes_to_copy)) {
-		printk(KERN_ERR "%s: Failed to copy data to user space.\n",
-		       DEVICE_NAME);
-		return -EFAULT;
-	}
-
-	*ppos += bytes_to_copy;
-	bytes_read = bytes_to_copy;
-
-	printk(KERN_INFO "%s: Read %zd bytes from offset %lld\n",
-	       DEVICE_NAME, bytes_read, (long long)*ppos - bytes_read);
-
-	return bytes_read;
-
-out:
-	spin_unlock_irqrestore(&my_buffer_lock, flags);
-	return bytes_read;
+    return bytes_to_read;
 }
 
 /*
- * @brief Writes data to the device buffer.
- * @param file Pointer to the file structure.
- * @param __user_buf Pointer to user space buffer.
- * @param count Number of bytes to write.
- * @param ppos Pointer to the file offset.
- * @return Number of bytes written, or a negative error code.
+ * @brief This function is called to write data to the device.
+ * @param file: Pointer to the file structure.
+ * @param user_buffer: Pointer to the user buffer to copy data from.
+ * @param count: The number of bytes to write.
+ * @param offset: Pointer to the file offset.
+ * @return The number of bytes written on success, or a negative error code on failure.
  */
-static ssize_t my_write(struct file *file, const char __user *__user_buf,
-			size_t count, loff_t *ppos)
+static ssize_t my_device_write(struct file *file, const char __user *user_buffer,
+                               size_t count, loff_t *offset)
 {
-	unsigned long flags;
-	ssize_t bytes_written = 0;
-	size_t bytes_to_copy;
-	unsigned int new_buffer_len;
+    ssize_t bytes_to_write;
 
-	spin_lock_irqsave(&my_buffer_lock, flags);
+    /* Check if the offset is beyond the buffer size */
+    if (*offset >= BUFFER_SIZE)
+        return -ENOSPC; /* No space left on device */
 
-	/* Check if write position is beyond buffer capacity */
-	if (*ppos >= BUFFER_SIZE) {
-		printk(KERN_WARNING "%s: Attempted to write beyond buffer capacity at offset %lld\n",
-		       DEVICE_NAME, (long long)*ppos);
-		bytes_written = -ENOSPC;
-		goto out;
-	}
+    /* Calculate the number of bytes that can be written from the current offset */
+    bytes_to_write = min((size_t)(BUFFER_SIZE - *offset), count);
 
-	/* Calculate how many bytes can be copied into the buffer */
-	bytes_to_copy = min((size_t)count, (size_t)(BUFFER_SIZE - *ppos));
+    /* Copy data from user buffer to kernel buffer */
+    if (copy_from_user(my_buffer + *offset, user_buffer, bytes_to_write)) {
+        pr_err("%s: Failed to copy data from user space\n", DRIVER_NAME);
+        return -EFAULT;
+    }
 
-	spin_unlock_irqrestore(&my_buffer_lock, flags);
+    *offset += bytes_to_write;
+    pr_info("%s: Written %zd bytes to offset %lld\n", DRIVER_NAME,
+            bytes_to_write, *offset - bytes_to_write);
 
-	/* Copy data from user space */
-	if (copy_from_user(my_buffer + *ppos, __user_buf, bytes_to_copy)) {
-		printk(KERN_ERR "%s: Failed to copy data from user space.\n",
-		       DEVICE_NAME);
-		return -EFAULT;
-	}
-
-	spin_lock_irqsave(&my_buffer_lock, flags);
-	*ppos += bytes_to_copy;
-	bytes_written = bytes_to_copy;
-
-	/* Update logical buffer length if data extends beyond current length */
-	new_buffer_len = *ppos;
-	if (new_buffer_len > my_buffer_len)
-		my_buffer_len = new_buffer_len;
-
-	spin_unlock_irqrestore(&my_buffer_lock, flags);
-
-	printk(KERN_INFO "%s: Written %zd bytes to offset %lld\n",
-	       DEVICE_NAME, bytes_written, (long long)*ppos - bytes_written);
-
-	return bytes_written;
-
-out:
-	spin_unlock_irqrestore(&my_buffer_lock, flags);
-	return bytes_written;
+    return bytes_to_write;
 }
 
 /* File operations structure */
 static const struct file_operations my_fops = {
-	.owner = THIS_MODULE,
-	.open = my_open,
-	.release = my_release,
-	.read = my_read,
-	.write = my_write,
-	.llseek = no_llseek, /* Simple devices often don't need complex seek */
+    .owner   = THIS_MODULE,
+    .open    = my_device_open,
+    .release = my_device_release,
+    .read    = my_device_read,
+    .write   = my_device_write,
 };
 
 /*
- * @brief Initializes the character device driver.
- * @return 0 on success, or a negative error code.
+ * @brief This function is called when the module is loaded.
+ * @return 0 on success, or a negative error code on failure.
  */
-static int __init my_chardev_init(void)
+static int __init my_char_driver_init(void)
 {
-	int ret;
-	struct device *dev_ret;
+    int ret;
+    struct device *dev_ptr;
 
-	printk(KERN_INFO "%s: Initializing character device module.\n",
-	       DRIVER_NAME);
+    pr_info("%s: Initializing the character device driver\n", DRIVER_NAME);
 
-	/* 1. Allocate a major/minor number region */
-	ret = alloc_chrdev_region(&my_dev_number, 0, 1, DRIVER_NAME);
-	if (ret < 0) {
-		printk(KERN_ERR "%s: Failed to allocate char device region.\n",
-		       DRIVER_NAME);
-		return ret;
-	}
-	printk(KERN_INFO "%s: Allocated major %d, minor %d\n", DRIVER_NAME,
-	       MAJOR(my_dev_number), MINOR(my_dev_number));
+    /* 1. Allocate a major and minor number for the device */
+    ret = alloc_chrdev_region(&my_device_nbr, 0, 1, DRIVER_NAME);
+    if (ret < 0) {
+        pr_err("%s: Failed to allocate char device region\n", DRIVER_NAME);
+        goto cleanup_exit;
+    }
+    pr_info("%s: Device registered with Major:%d Minor:%d\n", DRIVER_NAME,
+            MAJOR(my_device_nbr), MINOR(my_device_nbr));
 
-	/* 2. Initialize the cdev structure */
-	cdev_init(&my_cdev, &my_fops);
-	my_cdev.owner = THIS_MODULE;
+    /* 2. Allocate and initialize the internal buffer */
+    // Using kzalloc to allocate zero-initialized memory, removing the need for memset
+    my_buffer = (char *)kzalloc(BUFFER_SIZE, GFP_KERNEL);
+    if (!my_buffer) {
+        pr_err("%s: Failed to allocate buffer\n", DRIVER_NAME);
+        ret = -ENOMEM;
+        goto cleanup_unregister_chrdev;
+    }
+    pr_info("%s: Internal buffer allocated (1KB) and zero-initialized\n", DRIVER_NAME);
 
-	/* 3. Add the character device to the system */
-	ret = cdev_add(&my_cdev, my_dev_number, 1);
-	if (ret < 0) {
-		printk(KERN_ERR "%s: Failed to add cdev.\n", DRIVER_NAME);
-		goto unregister_region;
-	}
+    /* 3. Create a cdev structure and initialize it */
+    cdev_init(&my_cdev, &my_fops);
+    my_cdev.owner = THIS_MODULE;
 
-	/* 4. Create a device class (for /sys/class) */
-	my_class = class_create(THIS_MODULE, DRIVER_NAME);
-	if (IS_ERR(my_class)) {
-		printk(KERN_ERR "%s: Failed to create device class.\n",
-		       DRIVER_NAME);
-		ret = PTR_ERR(my_class);
-		goto cdev_del;
-	}
+    /* 4. Add the cdev to the kernel */
+    ret = cdev_add(&my_cdev, my_device_nbr, 1);
+    if (ret < 0) {
+        pr_err("%s: Failed to add cdev\n", DRIVER_NAME);
+        goto cleanup_free_buffer;
+    }
+    pr_info("%s: Cdev added\n", DRIVER_NAME);
 
-	/* 5. Create a device file in /dev */
-	dev_ret = device_create(my_class, NULL, my_dev_number, NULL,
-				DEVICE_NAME);
-	if (IS_ERR(dev_ret)) {
-		printk(KERN_ERR "%s: Failed to create device.\n", DRIVER_NAME);
-		ret = PTR_ERR(dev_ret);
-		goto class_destroy;
-	}
+    /* 5. Create a device class (for udev auto-creation of device file) */
+    my_class = class_create(DRIVER_NAME);
+    if (IS_ERR(my_class)) {
+        pr_err("%s: Failed to create device class\n", DRIVER_NAME);
+        ret = (int)PTR_ERR(my_class);
+        goto cleanup_del_cdev;
+    }
+    pr_info("%s: Device class created\n", DRIVER_NAME);
 
-	/* Initialize buffer and spinlock */
-	memset(my_buffer, 0, BUFFER_SIZE);
-	my_buffer_len = 0; /* No data in buffer initially */
-	spin_lock_init(&my_buffer_lock);
+    /* 6. Create the device file in /dev */
+    dev_ptr = device_create(my_class, NULL, my_device_nbr, NULL, DEVICE_NAME);
+    if (IS_ERR(dev_ptr)) {
+        pr_err("%s: Failed to create device file %s\n", DRIVER_NAME,
+               DEVICE_NAME);
+        ret = (int)PTR_ERR(dev_ptr);
+        goto cleanup_destroy_class;
+    }
+    pr_info("%s: Device file /dev/%s created\n", DRIVER_NAME, DEVICE_NAME);
 
-	printk(KERN_INFO "%s: Module loaded successfully.\n", DRIVER_NAME);
-	return 0;
+    pr_info("%s: Character device driver loaded successfully\n", DRIVER_NAME);
+    return 0;
 
-class_destroy:
-	class_destroy(my_class);
-cdev_del:
-	cdev_del(&my_cdev);
-unregister_region:
-	unregister_chrdev_region(my_dev_number, 1);
-	return ret;
+cleanup_destroy_class:
+    class_destroy(my_class);
+cleanup_del_cdev:
+    cdev_del(&my_cdev);
+cleanup_free_buffer:
+    kfree(my_buffer);
+cleanup_unregister_chrdev:
+    unregister_chrdev_region(my_device_nbr, 1);
+cleanup_exit:
+    pr_err("%s: Module initialization failed\n", DRIVER_NAME);
+    return ret;
 }
 
 /*
- * @brief Cleans up and exits the character device driver.
+ * @brief This function is called when the module is unloaded.
  */
-static void __exit my_chardev_exit(void)
+static void __exit my_char_driver_exit(void)
 {
-	printk(KERN_INFO "%s: Exiting character device module.\n", DRIVER_NAME);
+    pr_info("%s: Exiting the character device driver\n", DRIVER_NAME);
 
-	/* 1. Destroy device file */
-	device_destroy(my_class, my_dev_number);
-	/* 2. Destroy device class */
-	class_destroy(my_class);
-	/* 3. Delete cdev */
-	cdev_del(&my_cdev);
-	/* 4. Unregister major/minor number */
-	unregister_chrdev_region(my_dev_number, 1);
+    /* 1. Destroy the device file */
+    device_destroy(my_class, my_device_nbr);
+    pr_info("%s: Device file /dev/%s destroyed\n", DRIVER_NAME, DEVICE_NAME);
 
-	printk(KERN_INFO "%s: Module unloaded successfully.\n", DRIVER_NAME);
+    /* 2. Destroy the device class */
+    class_destroy(my_class);
+    pr_info("%s: Device class destroyed\n", DRIVER_NAME);
+
+    /* 3. Delete the cdev */
+    cdev_del(&my_cdev);
+    pr_info("%s: Cdev deleted\n", DRIVER_NAME);
+
+    /* 4. Free the internal buffer */
+    kfree(my_buffer);
+    pr_info("%s: Internal buffer freed\n", DRIVER_NAME);
+
+    /* 5. Unregister the character device region */
+    unregister_chrdev_region(my_device_nbr, 1);
+    pr_info("%s: Character device region unregistered\n", DRIVER_NAME);
+
+    pr_info("%s: Character device driver unloaded\n", DRIVER_NAME);
 }
 
-module_init(my_chardev_init);
-module_exit(my_chardev_exit);
+module_init(my_char_driver_init);
+module_exit(my_char_driver_exit);
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Bhanu");
+MODULE_DESCRIPTION("A simple character device driver with 1KB buffer.");
+MODULE_VERSION("0.1");

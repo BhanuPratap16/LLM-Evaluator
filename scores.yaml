@@ -1,0 +1,24 @@
+- Unsuccessful compilation: 2
+  compile_score: 0.6
+  iteration: 1
+  total_score: 0.8
+  warninghandling_score: 1.0
+  warnings: 0
+- Unsuccessful compilation: 4
+  compile_score: 0.2
+  iteration: 1
+  total_score: 0.1
+  warninghandling_score: 0.0
+  warnings: 25
+- Unsuccessful compilation: 0
+  compile_score: 1.0
+  iteration: 2
+  total_score: 0.8200000000000001
+  warninghandling_score: 0.64
+  warnings: 9
+- Unsuccessful compilation: 0
+  compile_score: 1.0
+  iteration: 3
+  total_score: 0.94
+  warninghandling_score: 0.88
+  warnings: 3

@@ -1,11 +1,27 @@
 ---
 MainSourceFile:  '/media/sf_LLM-Evaluator/ldd.c'
 Diagnostics:
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        ldd.c
+      FileOffset:      1732
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_LLM-Evaluator'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        ldd.c
+      FileOffset:      2571
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_LLM-Evaluator'
   - DiagnosticName:  clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling
     DiagnosticMessage:
       Message:         'Call to function ''memset'' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as ''memset_s'' in case of C11'
       FilePath:        ldd.c
-      FileOffset:      4762
+      FileOffset:      4559
       Replacements:    []
       Ranges:
         - FilePath:        ''
@@ -38,7 +54,7 @@ Diagnostics:
             Length:          16
       - Message:         'Call to function ''memset'' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as ''memset_s'' in case of C11'
         FilePath:        ldd.c
-        FileOffset:      4762
+        FileOffset:      4559
         Replacements:    []
         Ranges:
           - FilePath:        ''
