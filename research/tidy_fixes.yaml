@@ -1,0 +1,28 @@
+---
+MainSourceFile:  'd:\Machine Learning\Job Assesement\H2Loop\Assignment\LLM-Evaluator\research\ldd.c'
+Diagnostics:
+  - DiagnosticName:  clang-diagnostic-error
+    DiagnosticMessage:
+      Message:         no input files
+      FilePath:        ''
+      FileOffset:      0
+      Replacements:    []
+    Level:           Error
+    BuildDirectory:  ''
+  - DiagnosticName:  clang-diagnostic-error
+    DiagnosticMessage:
+      Message:         'no such file or directory: ''d:\Machine Learning\Job Assesement\H2Loop\Assignment\LLM-Evaluator\research\ldd.c'''
+      FilePath:        ''
+      FileOffset:      0
+      Replacements:    []
+    Level:           Error
+    BuildDirectory:  ''
+  - DiagnosticName:  clang-diagnostic-error
+    DiagnosticMessage:
+      Message:         'unable to handle compilation, expected exactly one compiler job in '''''
+      FilePath:        ''
+      FileOffset:      0
+      Replacements:    []
+    Level:           Error
+    BuildDirectory:  ''
+...
