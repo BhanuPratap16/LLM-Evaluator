@@ -1,12 +1,21 @@
 # LLM-Evaluator
 
-A comprehensive evaluation framework for Large Language Models (LLMs) focused on code compilation and warning handling capabilities for Linux Device Drivers. This project evaluates LLM performance using static analysis tools and compilation metrics.
+A comprehensive evaluation framework for Large Language Models (LLMs) focused on iterative code refinement, compilation success, and warning handling capabilities for Linux Device Drivers. This project evaluates LLM performance through a robust feedback-driven approach where models receive error logs from previous iterations to generate increasingly efficient code.
 
 ## Overview
 
-The LLM-Evaluator assesses language model performance using two primary metrics:
+The LLM-Evaluator assesses language model performance using an iterative code refinement approach. The framework employs a robust methodology where LLM models receive error logs from previous iteration generated code, enabling them to fix issues iteratively and produce increasingly efficient code.
+
+**Key Evaluation Metrics:**
 - **Compile Score**: Ratio of successful compilations to total scripts (Error handling is included)
 - **Warning Handling Score**: Ratio of warnings resolved to total warnings generated in the initial iteration
+
+**Iterative Refinement Process:**
+1. LLM generates initial code implementation
+2. Code is compiled and analyzed using static analysis tools
+3. Error logs, warnings, and compilation issues are fed back to the LLM
+4. LLM iteratively refines the code based on feedback
+5. Process continues until optimal code quality is achieved
 
 The final evaluation score is calculated as: `Total Score = 0.5 × Compile Score + 0.5 × Warning Handling Score`
 
@@ -14,8 +23,6 @@ The final evaluation score is calculated as: `Total Score = 0.5 × Compile Score
 
 - Oracle VirtualBox
 - Ubuntu Server/Desktop ISO
-
-
 
 ## Installation & Setup
 
@@ -147,18 +154,22 @@ python3 main.py
 
 ### Current Configuration
 - **Model**: Gemini-2.5-Flash
+- **Evaluation Approach**: Iterative feedback-driven code refinement
 - **Primary Metrics**:
   - **Compile Score**: `successful_compilations / total_scripts`
   - **Warning Handling Score**: `warnings_handled / total_warnings_first_iteration`
 - **Final Score**: Weighted average of both metrics (50% each)
+- **Feedback Mechanism**: Error logs and compilation warnings from each iteration are provided to the LLM for subsequent code improvements
 
 ## Architecture
 
 The evaluation framework consists of:
-- Static analysis integration with clang-tidy
-- Compilation testing infrastructure
-- Warning detection and resolution tracking
-- LLM response evaluation pipeline
+- **Iterative Feedback Loop**: Error logs and warnings from previous iterations are systematically fed back to the LLM
+- **Static Analysis Integration**: Integration with clang-tidy for comprehensive code quality assessment
+- **Compilation Testing Infrastructure**: Automated compilation and testing pipeline
+- **Warning Detection and Resolution Tracking**: Continuous monitoring of warning resolution across iterations
+- **LLM Response Evaluation Pipeline**: Assessment of model performance based on iterative code improvements
+- **Robust Code Generation**: Multi-iteration approach ensuring efficient and error-free code production
 
 ## Troubleshooting
 
@@ -169,12 +180,5 @@ The evaluation framework consists of:
 3. **Compilation database errors**: Ensure all development tools are properly installed before running `bear -- make`
 4. **Python package installation failures**: Confirm virtual environment is activated and internet connectivity is available
 
-### System Requirements
 
-- **Host System**: Windows/macOS/Linux with VirtualBox support
-- **VM Requirements**: 
-  - Minimum 4GB RAM
-  - 20GB disk space
-  - Ubuntu 20.04+ recommended
-- **Network**: Internet access for package installations
 
