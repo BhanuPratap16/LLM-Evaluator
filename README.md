@@ -34,7 +34,7 @@ If you see something like vboxsf::x:654::$USER
 then its installed
 
 Now, Run the below command to add your user 
-``` bash
+bash ``` 
 sudo usermod -aG vboxsf $USER
 ```
 
@@ -45,18 +45,19 @@ Makefile content dont include ldd.c  as dependencies in add :
 
 
 Now, In order to run clang-tidy without any error we need to generate compile_commands.json file to get reference of supporting modules to compile
-
+bash```
 bear -- make  
-
+```
 command to do so. 
 
 and After that, we need to remove non important flags which clang-tidy has nothing to do so, you need to run the below code to remove those flags through this command
-
+bash```
 jq 'map(.arguments |= map(select(. | test("^-fconserve-stack$|^-fno-allow-store-data-races$|^-mindirect-branch-register$|^-mindirect-branch=thunk-extern$|^-mpreferred-stack-boundary=3$|^-fsanitize=bounds-strict$|^-mrecord-mcount$|^-falign-jumps=1$") | not)))' compile_commands.json > compile_commands.tmp && mv compile_commands.tmp compile_commands.json
-
+```
 Now, Run the following command to run clang-tidy 
+bash```
 clang-tidy ldd.c -p . --extra-arg=-I/lib/modules/$(uname -r)/build/include -export-fixes=tidy_fixes.yaml &> clang_tidy_output.txt
-
+```
 
 
 
