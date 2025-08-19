@@ -61,5 +61,14 @@ clang-tidy ldd.c -p . --extra-arg=-I/lib/modules/$(uname -r)/build/include -expo
 
 
 
+Now, IN order to run the python main.py file 
+Follow the along 
 
+sudo apt-get install python3-venv -y 
+
+python3 -m venv myenv
+
+source myenv/bin/activate
+
+pip install -r requirements.txt
 

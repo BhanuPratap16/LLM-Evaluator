@@ -1,4 +1,5 @@
 {
     "coding-style":"https://www.kernel.org/doc/Documentation/process/coding-style.rst",
+    "model":"gemini-2.5-flash",
     "questions" :["Create a simple character device driver that supports basic read/write operations with a 1KB internal buffer.","Implement a platform device driver for a memory-mapped GPIO controller with interrupt support.","Generate a simple Linux kernel driver that registers an interrupt handler for a given IRQ line and logs when the interrupt occurs.","Write a Linux device driver that creates a /proc/mydriver entry and allows user space to read a counter value that increments on every read.","Write a character device driver that implements ioctl to handle commands for setting and getting an integer value."]
 }

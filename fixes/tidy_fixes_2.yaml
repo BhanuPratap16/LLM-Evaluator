@@ -1,0 +1,174 @@
+---
+MainSourceFile:  '/media/sf_LLM-Evaluator/ldd.c'
+Diagnostics:
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      2187
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''size_t'' (aka ''unsigned long'') to signed type ''ssize_t'' (aka ''long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      2215
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      3093
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''size_t'' (aka ''unsigned long'') to signed type ''ssize_t'' (aka ''long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      3117
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling
+    DiagnosticMessage:
+      Message:         'Call to function ''memset'' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as ''memset_s'' in case of C11'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      4004
+      Replacements:    []
+      Ranges:
+        - FilePath:        ''
+          FileOffset:      0
+          Length:          0
+    Notes:
+      - Message:         'expanded from macro ''memset'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      18267
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      18267
+            Length:          71
+      - Message:         'expanded from macro ''__fortify_memset_chk'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      18028
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      18028
+            Length:          19
+      - Message:         'expanded from macro ''__underlying_memset'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      4750
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      4750
+            Length:          16
+      - Message:         'Call to function ''memset'' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as ''memset_s'' in case of C11'
+        FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+        FileOffset:      4004
+        Replacements:    []
+        Ranges:
+          - FilePath:        ''
+            FileOffset:      0
+            Length:          0
+      - Message:         'expanded from macro ''memset'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      18267
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      18267
+            Length:          71
+      - Message:         'expanded from macro ''__fortify_memset_chk'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      18028
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      18028
+            Length:          19
+      - Message:         'expanded from macro ''__underlying_memset'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      4750
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      4750
+            Length:          16
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling
+    DiagnosticMessage:
+      Message:         'Call to function ''memset'' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as ''memset_s'' in case of C11'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      4347
+      Replacements:    []
+      Ranges:
+        - FilePath:        ''
+          FileOffset:      0
+          Length:          0
+    Notes:
+      - Message:         'expanded from macro ''memset'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      18267
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      18267
+            Length:          71
+      - Message:         'expanded from macro ''__fortify_memset_chk'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      18028
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      18028
+            Length:          19
+      - Message:         'expanded from macro ''__underlying_memset'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      4750
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      4750
+            Length:          16
+      - Message:         'Call to function ''memset'' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as ''memset_s'' in case of C11'
+        FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+        FileOffset:      4347
+        Replacements:    []
+        Ranges:
+          - FilePath:        ''
+            FileOffset:      0
+            Length:          0
+      - Message:         'expanded from macro ''memset'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      18267
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      18267
+            Length:          71
+      - Message:         'expanded from macro ''__fortify_memset_chk'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      18028
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      18028
+            Length:          19
+      - Message:         'expanded from macro ''__underlying_memset'''
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+        FileOffset:      4750
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fortify-string.h'
+            FileOffset:      4750
+            Length:          16
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+...

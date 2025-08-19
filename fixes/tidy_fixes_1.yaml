@@ -1,0 +1,133 @@
+---
+MainSourceFile:  '/media/sf_LLM-Evaluator/ldd.c'
+Diagnostics:
+  - DiagnosticName:  bugprone-reserved-identifier
+    DiagnosticMessage:
+      Message:         'declaration uses identifier ''__user_buf'', which is a reserved identifier'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      1739
+      Replacements:
+        - FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+          Offset:          1739
+          Length:          10
+          ReplacementText: _user_buf
+        - FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+          Offset:          2258
+          Length:          10
+          ReplacementText: _user_buf
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      2424
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''size_t'' (aka ''unsigned long'') to signed type ''ssize_t'' (aka ''long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      2453
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-reserved-identifier
+    DiagnosticMessage:
+      Message:         'declaration uses identifier ''__user_buf'', which is a reserved identifier'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      3049
+      Replacements:
+        - FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+          Offset:          3049
+          Length:          10
+          ReplacementText: _user_buf
+        - FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+          Offset:          3754
+          Length:          10
+          ReplacementText: _user_buf
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      3947
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''size_t'' (aka ''unsigned long'') to signed type ''ssize_t'' (aka ''long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      3979
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  clang-diagnostic-error
+    DiagnosticMessage:
+      Message:         'use of undeclared identifier ''no_llseek''; did you mean ''noop_llseek''?'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      4646
+      Replacements:
+        - FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+          Offset:          4646
+          Length:          9
+          ReplacementText: noop_llseek
+    Notes:
+      - Message:         '''noop_llseek'' declared here'
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/fs.h'
+        FileOffset:      112835
+        Replacements:    []
+    Level:           Error
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  clang-diagnostic-error
+    DiagnosticMessage:
+      Message:         'too many arguments to function call, expected single argument ''name'', have 2 arguments'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      5733
+      Replacements:    []
+      Ranges:
+        - FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+          FileOffset:      5707
+          Length:          12
+        - FilePath:        ''
+          FileOffset:      0
+          Length:          0
+    Notes:
+      - Message:         'expanded from macro ''DRIVER_NAME'''
+        FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+        FileOffset:      198
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+            FileOffset:      198
+            Length:          11
+      - Message:         '''class_create'' declared here'
+        FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/device/class.h'
+        FileOffset:      7627
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/usr/src/linux-headers-6.14.0-28-generic/include/linux/device/class.h'
+            FileOffset:      7640
+            Length:          16
+    Level:           Error
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''long'' to signed type ''int'' is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      5861
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''long'' to signed type ''int'' is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      6118
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+...

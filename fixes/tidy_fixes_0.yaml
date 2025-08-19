@@ -1,0 +1,105 @@
+---
+MainSourceFile:  '/media/sf_LLM-Evaluator/ldd.c'
+Diagnostics:
+  - DiagnosticName:  clang-diagnostic-error
+    DiagnosticMessage:
+      Message:         'expected identifier or ''('''
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      0
+      Replacements:    []
+    Level:           Error
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      3113
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long'' to signed type ''ssize_t'' (aka ''long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      3279
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      4804
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long long'' to signed type ''loff_t'' (aka ''long long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      5176
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''unsigned long'' to signed type ''ssize_t'' (aka ''long'') is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      5396
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-easily-swappable-parameters
+    DiagnosticMessage:
+      Message:         '2 adjacent parameters of ''mychardev_llseek'' of convertible types are easily swapped by mistake'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      5755
+      Replacements:    []
+      Ranges:
+        - FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+          FileOffset:      5755
+          Length:          25
+    Notes:
+      - Message:         'the first parameter in the range is ''offset'''
+        FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+        FileOffset:      5762
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+            FileOffset:      5762
+            Length:          6
+      - Message:         'the last parameter in the range is ''whence'''
+        FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+        FileOffset:      5774
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+            FileOffset:      5774
+            Length:          6
+      - Message:         ''
+        FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+        FileOffset:      5755
+        Replacements:    []
+      - Message:         '''loff_t'' and ''int'' may be implicitly converted: ''loff_t'' (as ''long long'') -> ''int'', ''int'' -> ''loff_t'' (as ''long long'')'
+        FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+        FileOffset:      5770
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  bugprone-narrowing-conversions
+    DiagnosticMessage:
+      Message:         'narrowing conversion from ''long'' to signed type ''int'' is implementation-defined'
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      7680
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/media/sf_Shared'
+  - DiagnosticName:  clang-diagnostic-error
+    DiagnosticMessage:
+      Message:         'expected identifier or ''('''
+      FilePath:        '/media/sf_LLM-Evaluator/ldd.c'
+      FileOffset:      9403
+      Replacements:    []
+    Level:           Error
+    BuildDirectory:  '/media/sf_Shared'
+...
