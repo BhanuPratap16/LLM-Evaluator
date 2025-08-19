@@ -114,12 +114,12 @@ for i in tqdm(range(iterations), desc="Running Iterations and Scoring"):
     total_score=warninghandling_score*0.5 + compile_score*0.5
     
     entry={
-        "iteration": i+1,
+        "Iteration": i+1,
         "Unsuccessful compilation":5-compile_rate,
         "warnings":current_warnings,
         "compile_score": compile_score,
         "warninghandling_score": warninghandling_score,
-        "total_score": total_score
+        "Total_score": total_score
     }
     filename="scores.yaml"
     if os.path.exists(filename):
