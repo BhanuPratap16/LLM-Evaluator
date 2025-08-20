@@ -23,6 +23,7 @@ The final evaluation score is calculated as: `Total Score = 0.5 × Compile Score
 
 - Oracle VirtualBox
 - Ubuntu Server/Desktop ISO
+- Gemini API Key (Saved in .env file in the same directory as main.py)
 
 ## Installation & Setup
 
